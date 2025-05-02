@@ -1,0 +1,56 @@
+{% extends "menu/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="auth-card card">
+                <div class="card-header text-center">
+                    <h2 class="mb-0">Welcome Back</h2>
+                    <p class="text-muted mt-2">Sign in to manage your restaurant menu</p>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" class="auth-form">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">Sign In</button>
+                        </div>
+                    </form>
+                    <div class="mt-4 text-center">
+                        <p class="mb-0">Don't have an account? <a href="{% url 'menu:register' %}" class="text-decoration-none">Register here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .auth-card {
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .auth-card .card-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        color: white;
+        border-radius: 16px 16px 0 0 !important;
+        padding: 2rem;
+    }
+
+    .auth-form .form-control {
+        padding: 0.8rem 1rem;
+        border-radius: 8px;
+        border: 1px solid #dee2e6;
+        transition: all 0.3s ease;
+    }
+
+    .auth-form .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(44, 62, 80, 0.15);
+    }
+</style>
+{% endblock %}

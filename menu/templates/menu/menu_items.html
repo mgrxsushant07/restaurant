@@ -1,0 +1,53 @@
+{% extends "menu/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'menu:restaurant_menu' category.restaurant.id %}">Menu</a></li>
+            <li class="breadcrumb-item active">{{ category.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>{{ category.name }}</h1>
+        {% if user == category.restaurant %}
+        <a href="{% url 'menu:add_item' %}?category={{ category.id }}" class="btn btn-primary">Add Item</a>
+        {% endif %}
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for item in items %}
+        <div class="col">
+            <div class="card h-100 {% if not item.is_available %}opacity-50{% endif %}">
+                {% if item.photo %}
+                <img src="{{ item.photo.url }}" class="card-img-top" alt="{{ item.name }}" style="height: 200px; object-fit: cover;">
+                {% endif %}
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="card-title mb-0">{{ item.name }}</h5>
+                        <span class="badge bg-primary">${{ item.price }}</span>
+                    </div>
+                    <p class="card-text">{{ item.description }}</p>
+                    {% if not item.is_available %}
+                    <div class="badge bg-secondary mb-2">Not Available</div>
+                    {% endif %}
+                    {% if user == category.restaurant %}
+                    <div class="d-flex gap-2 mt-3">
+                        <a href="{% url 'menu:edit_item' item.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
+                        <a href="{% url 'menu:delete_item' item.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                <p class="mb-0">No items in this category yet.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
